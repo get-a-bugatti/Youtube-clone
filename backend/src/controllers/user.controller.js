@@ -7,6 +7,7 @@ import { objectId } from "../utils/objectId.js";
 import { Subscription } from "../models/subscription.models.js";
 import jwt from "jsonwebtoken";
 import fs from "fs";
+import mongoose from "mongoose";
 
 const generateAccessAndRefreshToken = async (userId) => {
   try {
@@ -467,10 +468,16 @@ const getUserChannelDetails = asyncHandler(async (req, res, next) => {
 });
 
 const getUserWatchHistory = asyncHandler(async (req, res, next) => {
+  const userId = req.user?._id;
+
+  if (!userId || !mongoose.isValidObjectId(userId)) {
+    throw new ApiError(401, "Unauthorized");
+  }
+
   const user = await User.aggregate([
     {
       $match: {
-        _id: objectId(req.user?._id),
+        _id: objectId(userId),
       },
     },
     {
@@ -567,9 +574,9 @@ const getUserSubscribedCount = asyncHandler(async (req, res, next) => {
     throw new ApiError(400, "UserId must be a string.");
   }
 
-  const clenaedUserId = userId.trim();
+  const cleanedUserId = userId.trim();
 
-  if (!clenaedUserId) {
+  if (!cleanedUserId) {
     throw new ApiError(400, "Valid UserId is required.");
   }
 

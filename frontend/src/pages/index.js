@@ -6,6 +6,7 @@ import YourVideos from "./YourVideos";
 import PlayVideo from "./PlayVideo";
 import LikedVideos from "./LikedVideos";
 import Subscriptions from "./Subscriptions";
+import WatchHistory from "./WatchHistory";
 
 export {
   Home,
@@ -16,4 +17,5 @@ export {
   PlayVideo,
   LikedVideos,
   Subscriptions,
+  WatchHistory,
 };

@@ -10,11 +10,11 @@ export default function LikedVideos() {
 
     useEffect(() => {
 
-        axios.post("/api/v1/users/liked/videos")
+        axios.get("/api/v1/users/liked/videos")
             .then(result => {
-                console.log("retrieved videos", result);
+                setVideos(result.data.data.docs);
 
-                setVideos(result.data.data);
+                console.log("result.data.data.docs :", result.data.data.docs);
             })
             .catch(error => {
                 if (error.response) {
@@ -28,9 +28,9 @@ export default function LikedVideos() {
             })
     }, [])
 
-
     if (loader) return <div>Loading...</div>
     if (error) return <div>Error : {error}</div>
+    if (!videos) return <div>You have no liked videos.</div>
 
 
     return (

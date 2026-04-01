@@ -1,5 +1,6 @@
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FcSearch } from "react-icons/fc";
+import { useRef, useState } from "react";
 import {Input, Button, LogoutBtn, AvatarDropdown} from "../index.js"
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,6 +16,8 @@ export default function Header({
 }) {
     
     const authStatus = useSelector(state => state.auth.status);
+    const [searchQuery, setSearchQuery] = useState("");
+    const searchBarRef = useRef(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -42,6 +45,16 @@ export default function Header({
         { label: "Settings", onClick: () => console.log("Settings") },
       ];
 
+
+
+
+    const handleSearch = async (e) => {
+        e.preventDefault();
+
+        const value = searchBarRef.current.value;
+
+        navigate(`/?query=${encodeURIComponent(value)}`);
+    }
 
     const logout = async () => {
         let logoutFailed = false;
@@ -77,11 +90,14 @@ export default function Header({
                     </Link>
                 </div>
 
-                <div className="middle-section flex flex-row">
-                    <Input type="text" placeholder="Search Videos..." className="border-gray-400 h-full " />
-                    <Button bgColor="bg-white" className="border rounded-xl border-gray-400 px-2 py-2">
-                        <FcSearch className="text-lg"/>
-                    </Button>
+                <div className="middle-section">
+                    <form className="flex flex-row" onSubmit={handleSearch}>
+
+                        <Input type="text" placeholder="Search Videos..." className="border-gray-400 h-full" ref={searchBarRef} />
+                        <Button type="submit" bgColor="bg-white" className="border rounded-xl border-gray-400 px-2 py-2">
+                            <FcSearch className="text-lg"/>
+                        </Button>
+                    </form>
                 </div>
 
                 <div className="right-section flex items-center mr-4">

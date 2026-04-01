@@ -120,13 +120,6 @@ export default function VideoPlayer({
 
         </div>
       </div>
-
-      {/* 📝 Title & Description */}
-      <div className="mt-4">
-        <h2 className="text-lg font-semibold">{title}</h2>
-        <p className="text-gray-600 text-sm mt-1">{parse(description)}</p>
-      </div>
-
     </div>
   );
 }

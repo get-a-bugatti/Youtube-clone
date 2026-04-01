@@ -11,8 +11,6 @@ export default function YourVideos() {
 
         axios.post("/api/v1/videos/your-videos")
             .then(result => {
-                console.log("retireved videos", result);
-
                 setVideos(result.data.data);
             })
             .finally(() => {

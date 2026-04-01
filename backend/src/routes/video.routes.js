@@ -7,6 +7,7 @@ import {
   deleteVideo,
   getAllVideos,
   getVideosByUserId,
+  getVideoWithOwner,
 } from "../controllers/video.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { getVideoComments } from "../controllers/comment.controller.js";
@@ -16,6 +17,7 @@ const router = Router();
 
 router.route("/fetchAll").get(getAllVideos);
 router.route("/:videoId").get(verifyJWT, getVideoById);
+router.route("/owner/:videoId").get(verifyJWT, getVideoWithOwner);
 //  get /video/publish should have a form
 router.route("/publish").post(
   verifyJWT,

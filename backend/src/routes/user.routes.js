@@ -17,7 +17,10 @@ import {
   getUserSubscriptions,
 } from "../controllers/user.controller.js";
 
-import { toggleSubscription } from "../controllers/subscription.controller.js";
+import {
+  toggleSubscription,
+  checkSubscription,
+} from "../controllers/subscription.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -72,6 +75,7 @@ router
   .route("/c/:username/subscribers")
   .get(verifyJWT, getUserChannelSubscribers);
 
+router.route("/c/:username/isSubscribed").get(verifyJWT, checkSubscription);
 router.route("/c/:username/subscription").get(verifyJWT, getUserSubscriptions);
 // subscribe/unsubscribe
 router.route("/c/:username/subscription").post(verifyJWT, toggleSubscription);

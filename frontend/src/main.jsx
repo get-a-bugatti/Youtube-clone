@@ -3,13 +3,24 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
-import {CreateVideo, Home, Login, Signup, YourVideos, PlayVideo, LikedVideos, Subscriptions } from "./pages/index.js"
+import {
+  CreateVideo, 
+  Home, 
+  Login, 
+  Signup, 
+  YourVideos, 
+  PlayVideo, 
+  LikedVideos, 
+  Subscriptions,
+  WatchHistory
+} from "./pages/index.js"
 
 import {CommentCard} from "./components/index.js"
 import {Protected} from './components/index.js'
 import { Provider } from 'react-redux'
 import store from "./store/store.js"
 import SubscriptionCard from './components/SubscriptionCard.jsx'
+import SubscribeBtn from './components/SubscribeBtn.jsx'
 
 
 const router = createBrowserRouter([
@@ -76,6 +87,20 @@ const router = createBrowserRouter([
         )
       },
       {
+        path: "/watch-history",
+        element: (
+          <Protected authentication={true}>
+            <WatchHistory />
+          </Protected>
+        )
+      },
+      {
+        path: "/test-subscribe-btn",
+        element: (
+          <SubscribeBtn />
+        )
+      },
+      {
         path: "/test-comment",
         element: (
           <CommentCard />
@@ -86,9 +111,7 @@ const router = createBrowserRouter([
 ])
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <Provider store={store}>
-      <RouterProvider router={router}></RouterProvider>
-    </Provider>
-  </StrictMode>,
+  <Provider store={store}>
+    <RouterProvider router={router}></RouterProvider>
+  </Provider>
 )

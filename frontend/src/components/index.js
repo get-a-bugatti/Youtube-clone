@@ -14,12 +14,17 @@ import SignupForm from "./Auth-Form/SignupForm";
 import RTE from "./RTE";
 import VideoPlayer from "./VideoPlayer";
 import CommentCard from "./Comment/CommentCard.jsx";
+import SubscribeBtn from "./SubscribeBtn.jsx";
+import VideoInfo from "./VideoInfo.jsx";
+import SubscribeBtnForm from "./SubscribeBtnForm.jsx";
 
 export {
   Header,
   Footer,
   VideoCard,
   VideoForm,
+  VideoInfo,
+  VideoPlayer,
   Button,
   Input,
   LogoutBtn,
@@ -30,6 +35,7 @@ export {
   LoginForm,
   SignupForm,
   RTE,
-  VideoPlayer,
   CommentCard,
+  SubscribeBtn,
+  SubscribeBtnForm,
 };

@@ -1,3 +1,4 @@
+import {SubscribeBtnForm} from "./index";
 
 
 const formatSubscribers = (subscribers) => {
@@ -33,9 +34,9 @@ export default function SubscriptionCard({
                 <p className="username text-sm text-gray-500">@{channel.username}</p>
                 <p className="subscribers text-sm text-gray-500">{formatSubscribers(channel.subscribersCount)}</p>
             </div>
-            {
-                // later add subscribe button
-            }
+            <div className="ml-auto mr-10">
+                <SubscribeBtnForm channel={channel}/>
+            </div>
         </div>
     )
 }

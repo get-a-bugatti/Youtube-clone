@@ -1,6 +1,6 @@
 
 import {useState, useEffect} from "react"
-import { VideoPlayer } from "../components/index.js";
+import { VideoPlayer, VideoInfo } from "../components/index.js";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 
@@ -17,10 +17,9 @@ export default function PlayVideo() {
     }
 
     useEffect(() => {
-        axios.get(`/api/v1/videos/${videoId}`)
+        axios.get(`/api/v1/videos/owner/${videoId}`)
             .then(response => {
-                console.log("response :", response);
-                setVideo(response.data.data);
+                setVideo(response.data?.data);
             })
             .catch(error => {
                 if (error.response) {
@@ -41,8 +40,10 @@ export default function PlayVideo() {
         <div className="w-full">
             <VideoPlayer
                 videoUrl={video.videoFile}
-                title={video.title}
-                description={video.description}
+            />
+            <VideoInfo title={video.title} 
+            description={video.description}
+            owner={video.owner}
             />
         </div>
     )

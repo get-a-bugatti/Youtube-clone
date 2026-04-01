@@ -164,11 +164,16 @@ const getLikedTweets = asyncHandler(async (req, res, next) => {
 
 const getLikedVideos = asyncHandler(async (req, res, next) => {
   const { page = 1, limit = 10 } = req.query;
+  const userId = req.user?._id;
+
+  if (!userId) {
+    throw new ApiError(401, "Unauthorized.");
+  }
 
   const aggregate = Like.aggregate([
     {
       $match: {
-        likedBy: userId,
+        likedBy: objectId(userId),
         video: { $ne: null },
       },
     },

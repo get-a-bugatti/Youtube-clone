@@ -35,8 +35,8 @@ export default function Subscriptions() {
     return (
         <div className="space-y-4 ">
             {   
-                subscriptions.map((subscription) => {
-                    return <SubscriptionCard 
+                subscriptions.map((subscription, i) => {
+                    return <SubscriptionCard key={i}
                         channel={subscription}
                     />
                 })

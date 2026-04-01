@@ -4,6 +4,8 @@ import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { objectId } from "../utils/objectId.js";
+import { User } from "../models/user.models.js";
+import mongoose from "mongoose";
 
 const getAllVideos = asyncHandler(async (req, res, next) => {
   const {
@@ -164,10 +166,6 @@ const getVideosByUserId = asyncHandler(async (req, res, next) => {
     limit: Number(limit),
   });
 
-  //   const videos = await Video.find({
-  //     owner: objectId(userId),
-  //   });
-
   return res
     .status(200)
     .json(
@@ -177,6 +175,95 @@ const getVideosByUserId = asyncHandler(async (req, res, next) => {
         videos.docs
       )
     );
+});
+
+const getVideoWithOwner = asyncHandler(async (req, res) => {
+  // FUTURE IDEA ;
+  // store userId or IP, only increment views once per user
+  // Debounce user views, only count as view if user watches video for 10-30 seconds.
+
+  const { videoId } = req.params;
+
+  // 1️⃣ Validate input
+  if (!videoId || !String(videoId).trim()) {
+    throw new ApiError(400, "Video Id is required.");
+  }
+
+  // 2️⃣ Increment views FIRST (atomic + ensures existence)
+  const updatedVideo = await Video.findByIdAndUpdate(
+    videoId,
+    { $inc: { views: 1 } },
+    { new: true }
+  );
+
+  if (!updatedVideo) {
+    throw new ApiError(404, "Video not found");
+  }
+
+  // 3️⃣ Fetch video with owner (aggregation)
+  const [video] = await Video.aggregate([
+    {
+      $match: {
+        _id: updatedVideo._id, // safer than re-casting
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "owner",
+        foreignField: "_id",
+        as: "owner",
+        pipeline: [
+          {
+            $project: {
+              _id: 1,
+              fullName: 1,
+              username: 1,
+              avatar: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $addFields: {
+        owner: { $first: "$owner" },
+      },
+    },
+  ]);
+
+  // (extra safety, though already checked)
+  if (!video) {
+    throw new ApiError(404, "Video not found after aggregation");
+  }
+
+  // 4️⃣ Update watch history (NON-BLOCKING)
+  const userId = req.user?._id;
+
+  if (userId) {
+    try {
+      const response = await User.findOneAndUpdate(
+        objectId(userId),
+        {
+          $addToSet: {
+            watchHistory: objectId(videoId),
+          },
+        },
+        {
+          returnDocument: "after",
+        }
+      );
+
+      console.log("response from updating history : ", response);
+    } catch (err) {
+      console.error("Watch history update failed:", err);
+    }
+  }
+
+  // 5️⃣ Send response
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Video fetched successfully.", video));
 });
 
 const deleteVideo = asyncHandler(async (req, res, next) => {
@@ -322,4 +409,5 @@ export {
   deleteVideo,
   getVideosByUserId,
   getAllVideos,
+  getVideoWithOwner,
 };
