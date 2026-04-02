@@ -1,4 +1,6 @@
-import {Logo} from "./index"
+import {Logo, PlaylistDropdown} from "./index"
+import { useNavigate } from "react-router-dom";
+
 
 import {
     Link
@@ -9,6 +11,7 @@ export default function VideoCard({
     title,
     owner,
     views,
+    avatar,
     duration,
     thumbnail="/missing-thumbnail.jpg",
     createdAt=Date.now(),
@@ -16,6 +19,8 @@ export default function VideoCard({
     mode = "portrait", // ✅ NEW
     ...props
 }) {
+
+    const navigate = useNavigate();
 
     const convertDuration = (duration) => {
         if (typeof duration !== "number") {
@@ -81,14 +86,16 @@ export default function VideoCard({
     };
 
     return (
-        <Link to={`/watch?v=${_id}`}>
+        <div>
             <div
                 className={`
-                    border rounded-lg border-transparent bg-white
-                    ${mode === "landscape" ? "flex gap-3 items-start" : "flex flex-col"}
+                    border rounded-lg border-transparent bg-white cursor-pointer
+                    ${mode === "landscape" ? "flex gap-4 items-start" : "flex flex-col"}
                     ${className}
                 `}
+                onClick={() => navigate(`/watch?v=${_id}`)}
                 {...props}
+
             >
 
                 {/* 🎬 Thumbnail */}
@@ -114,19 +121,21 @@ export default function VideoCard({
                     lower-section
                     ${mode === "landscape"
                         ? "flex flex-col justify-between flex-1"
-                        : "grid grid-cols-[50px_1fr] mt-2"
+                        : "grid grid-cols-[50px_1fr_auto] items-start mt-2 gap-2"
                     }
                 `}>
 
-                    {/* 👤 Avatar (hide in landscape or make small) */}
+                    {/* 👤 Avatar */}
                     {mode === "portrait" && (
-                        <div className="image-container">
-                            <Logo
-                                src={owner.avatar}
-                                alt="profile image"
-                                className="rounded-full w-12 h-12 cursor-pointer"
-                            />
-                        </div>
+                        <Link to={`/channel/${owner?.username}`} onClick={(e) => e.stopPropagation()}>              
+                            <div className="image-container">
+                                <Logo
+                                    src={avatar || owner?.avatar}
+                                    alt="profile image"
+                                    className="rounded-full w-12 h-12 cursor-pointer object-contain bg-white"
+                                />
+                            </div>
+                        </Link>
                     )}
 
                     {/* 📄 Text */}
@@ -135,16 +144,23 @@ export default function VideoCard({
                             {title}
                         </p>
 
-                        <p className="text-sm text-gray-500">
-                            {owner?.fullName || owner?.name}
-                        </p>
+                        <Link to={`/channel/${owner?.username}`} onClick={(e) => e.stopPropagation()}>
+                            <p className="text-sm text-gray-500">
+                                {owner?.fullName || owner?.username}
+                            </p>
+                        </Link>
 
                         <div className="text-sm text-gray-500">
                             {formatViews(views)} &#183; {convertUploadTime(createdAt)}
                         </div>
                     </div>
+
+                    {/* 🎵 Playlist Dropdown */}
+                    <div className="shrink-0">
+                        <PlaylistDropdown videoId={_id} />
+                    </div>
                 </div>
             </div>
-        </Link>
+        </div>
     )
 }

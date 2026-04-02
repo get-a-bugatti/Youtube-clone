@@ -36,9 +36,9 @@ function App() {
   return (
     loading ? null : 
     <div className="">
-      <Header toggleSidebar={() => setExpanded(prev => !prev)}></Header>
+      <Header toggleSidebar={() => setExpanded(prev => !prev)} className="z-100"></Header>
       <Sidebar expanded={expanded}></Sidebar>
-      <div className={`${expanded ? "ml-40" : "ml-28"} mt-7`}>
+      <div className={`${expanded ? "ml-40" : "ml-28"} mt-27`}>
         <Outlet></Outlet>
       </div>
     </div>

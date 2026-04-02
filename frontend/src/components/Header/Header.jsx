@@ -16,7 +16,6 @@ export default function Header({
 }) {
     
     const authStatus = useSelector(state => state.auth.status);
-    const [searchQuery, setSearchQuery] = useState("");
     const searchBarRef = useRef(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -79,7 +78,7 @@ export default function Header({
     }
 
     return(
-        <header className="bg-white ">
+        <header className="bg-white fixed top-0 left-0 right-0 z-100">
             <nav className="py-4 px-3 flex flex-wrap flex-row align-center justify-between">
                 <div className="left-section flex flex-row items-center">
                     <div className="hamburger-menu-container hover:bg-gray-300 mt-1 mr-4 py-2 px-2 rounded-full">

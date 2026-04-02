@@ -31,7 +31,7 @@ export default function WatchHistory() {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div className="w-full">
+        <div className="max-w-[1000px] flex flex-col gap-3">
             {
                 history.map((video, i) => {
                     return <VideoCard 
@@ -42,6 +42,8 @@ export default function WatchHistory() {
                         duration={video.duration}
                         views={video.views}
                         thumbnail={video.thumbnail}
+                        mode="landscape"
+                        className="space-y-3"
                     />
                 })
             }

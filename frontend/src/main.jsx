@@ -12,7 +12,8 @@ import {
   PlayVideo, 
   LikedVideos, 
   Subscriptions,
-  WatchHistory
+  WatchHistory,
+  Channel
 } from "./pages/index.js"
 
 import {CommentCard} from "./components/index.js"
@@ -92,6 +93,12 @@ const router = createBrowserRouter([
           <Protected authentication={true}>
             <WatchHistory />
           </Protected>
+        )
+      },
+      {
+        path: "/channel/:username",
+        element: (
+          <Channel />
         )
       },
       {

@@ -17,6 +17,9 @@ import CommentCard from "./Comment/CommentCard.jsx";
 import SubscribeBtn from "./SubscribeBtn.jsx";
 import VideoInfo from "./VideoInfo.jsx";
 import SubscribeBtnForm from "./SubscribeBtnForm.jsx";
+import Channel from "./Channel.jsx";
+import PlaylistDropdown from "./PlaylistDropdown.jsx";
+import PlaylistCard from "./PlaylistCard.jsx";
 
 export {
   Header,
@@ -38,4 +41,7 @@ export {
   CommentCard,
   SubscribeBtn,
   SubscribeBtnForm,
+  Channel,
+  PlaylistDropdown,
+  PlaylistCard,
 };

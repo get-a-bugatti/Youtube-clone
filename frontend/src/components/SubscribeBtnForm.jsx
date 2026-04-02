@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react"
 import {SubscribeBtn} from "./index.js"
+import { useSelector } from "react-redux";
 import axios from "axios"
 
 export default function SubscribeBtnForm({
     channel={}
 }) {
 
+
+    const userData = useSelector(state => state.auth.userData); 
     const [isSubscribed, setIsSubscribed] = useState(false);
+
+    if (channel.username === userData.username) return <div></div>;
     
     useEffect(() => {
         
