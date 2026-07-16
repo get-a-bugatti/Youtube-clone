@@ -10,5 +10,6 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 const router = Router();
 
 router.route("/videos").get(verifyJWT, getLikedVideos);
+router.route("/videos").post(verifyJWT, toggleLikeVideo);
 
 export default router;

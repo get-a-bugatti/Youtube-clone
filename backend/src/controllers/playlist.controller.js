@@ -133,7 +133,7 @@ const deleteVideoFromPlaylist = asyncHandler(async (req, res, next) => {
     );
 });
 
-const getUserPlaylists = asyncHandler(async (req, res) => {
+const getMyPlaylists = asyncHandler(async (req, res) => {
   const userId = req.user?._id;
 
   if (!userId) {
@@ -255,6 +255,6 @@ export {
   deletePlaylist,
   addVideoToPlaylist,
   deleteVideoFromPlaylist,
-  getUserPlaylists,
+  getMyPlaylists,
   getPlaylistById,
 };

@@ -1,87 +1,91 @@
 import { Router } from "express";
 import {
+  // Auth
+  registerUser,
   loginUser,
   logoutUser,
-  registerUser,
   refreshAccessToken,
-  changeCurrentPassword,
-  updateAccountDetails,
+
+  // Current User
   getCurrentUser,
-  updateUserAvatar,
-  updateUserCoverImage,
-  getUserChannelDetails,
-  getUserWatchHistory,
-  getUserChannelSubscribers,
-  getUserChannelSubscribersCount,
-  getUserSubscribedCount,
-  getUserSubscriptions,
-  getUserChannelPage,
+  updateAccountDetails,
+  updatePassword,
+  updateAvatar,
+  updateCoverImage,
+  getWatchHistory,
+  getMySubscriptions,
+
+  // Channels
+  getChannel,
+  getChannelVideos,
+  getChannelSubscribers,
+  getChannelSubscriberCount,
+  getChannelSubscriptionCount,
 } from "../controllers/user.controller.js";
 
 import {
-  toggleSubscription,
   checkSubscription,
+  toggleSubscription,
 } from "../controllers/subscription.controller.js";
+
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.route("/register").post(
+/* ---------- Auth ---------- */
+
+router.post(
+  "/register",
   upload.fields([
-    {
-      name: "avatar",
-      maxCount: 1,
-    },
-    {
-      name: "coverImage",
-      maxCount: 1,
-    },
+    { name: "avatar", maxCount: 1 },
+    { name: "coverImage", maxCount: 1 },
   ]),
   registerUser
 );
 
-router.route("/login").post(upload.none(), loginUser);
+router.post("/login", upload.none(), loginUser);
+router.post("/logout", verifyJWT, logoutUser);
+router.post("/refresh-token", upload.none(), refreshAccessToken);
 
-router.route("/logout").post(verifyJWT, logoutUser);
+/* ---------- Current User ---------- */
 
-router.route("/refresh-token").post(upload.none(), refreshAccessToken);
+router.get("/me", verifyJWT, getCurrentUser);
 
-router.route("/change-password").post(verifyJWT, changeCurrentPassword);
+router.patch("/me", verifyJWT, updateAccountDetails);
 
-router.route("/update-account").patch(verifyJWT, updateAccountDetails);
+router.patch("/me/password", verifyJWT, updatePassword);
 
-router.route("/current-user").get(verifyJWT, getCurrentUser);
+router.patch("/me/avatar", verifyJWT, upload.single("avatar"), updateAvatar);
 
-// check endpoints later : update images
-router
-  .route("/update-avatar")
-  .patch(verifyJWT, upload.single("avatar"), updateUserAvatar);
+router.patch(
+  "/me/cover-image",
+  verifyJWT,
+  upload.single("coverImage"),
+  updateCoverImage
+);
 
-router
-  .route("/update-cover")
-  .patch(verifyJWT, upload.single("cover"), updateUserCoverImage);
+router.get("/me/watch-history", verifyJWT, getWatchHistory);
 
-//
+router.get("/me/subscriptions", verifyJWT, getMySubscriptions);
 
-router.route("/c/:username/details").get(getUserChannelDetails);
-router.route("/c/:username/page").get(getUserChannelPage);
+/* ---------- Channels ---------- */
 
-router
-  .route("/c/:username/subscribersCount")
-  .get(getUserChannelSubscribersCount);
+router.get("/channels/:username", getChannel);
 
-router.route("/u/:username/subscribedCount").get(getUserSubscribedCount);
+router.get("/channels/:username/videos", getChannelVideos);
 
-router
-  .route("/c/:username/subscribers")
-  .get(verifyJWT, getUserChannelSubscribers);
+router.get("/channels/:username/subscribers", verifyJWT, getChannelSubscribers);
 
-router.route("/c/:username/isSubscribed").get(verifyJWT, checkSubscription);
-router.route("/c/:username/subscription").get(verifyJWT, getUserSubscriptions);
-// subscribe/unsubscribe
-router.route("/c/:username/subscription").post(verifyJWT, toggleSubscription);
+router.get("/channels/:username/subscribers/count", getChannelSubscriberCount);
 
-router.route("/history").get(verifyJWT, getUserWatchHistory);
+router.get(
+  "/channels/:username/subscriptions/count",
+  getChannelSubscriptionCount
+);
+
+router.get("/channels/:username/subscription", verifyJWT, checkSubscription);
+
+router.post("/channels/:username/subscription", verifyJWT, toggleSubscription);
 
 export default router;

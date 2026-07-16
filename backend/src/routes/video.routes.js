@@ -1,13 +1,12 @@
 import { Router } from "express";
 import {
   getVideoById,
-  publishAVideo,
+  publishVideo,
   togglePublishStatus,
   updateVideo,
   deleteVideo,
   getAllVideos,
-  getVideosByUserId,
-  getVideoWithOwner,
+  getMyVideos,
 } from "../controllers/video.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { getVideoComments } from "../controllers/comment.controller.js";
@@ -15,9 +14,8 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.route("/fetchAll").get(getAllVideos);
+router.route("/all").get(getAllVideos);
 router.route("/:videoId").get(verifyJWT, getVideoById);
-router.route("/owner/:videoId").get(verifyJWT, getVideoWithOwner);
 //  get /video/publish should have a form
 router.route("/publish").post(
   verifyJWT,
@@ -31,12 +29,12 @@ router.route("/publish").post(
       maxCount: 1,
     },
   ]),
-  publishAVideo
+  publishVideo
 );
-router.route("/your-videos").post(verifyJWT, getVideosByUserId);
-router.route("/update/:videoId").post(verifyJWT, updateVideo);
-router.route("/delete/:videoId").post(verifyJWT, deleteVideo);
-router.route("/toggle/publish/:videoId").post(verifyJWT, togglePublishStatus);
+router.route("/me").post(verifyJWT, getMyVideos);
+router.route("/:videoId/update").post(verifyJWT, updateVideo);
+router.route("/:videoId/delete").post(verifyJWT, deleteVideo);
+router.route("/:videoId/toggle-publish").post(verifyJWT, togglePublishStatus);
 router.route("/:videoId/comments").get(getVideoComments);
 
 export default router;

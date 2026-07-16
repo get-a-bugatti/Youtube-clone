@@ -77,107 +77,23 @@ const getAllVideos = asyncHandler(async (req, res, next) => {
     .json(new ApiResponse(200, "Videos fetched successfully.", videos.docs));
 });
 
-const getVideoById = asyncHandler(async (req, res, next) => {
-  const { videoId } = req.params;
+// const getVideoById = asyncHandler(async (req, res, next) => {
+//   const { videoId } = req.params;
 
-  if (!videoId || !String(videoId).trim()) {
-    throw new ApiError(400, "Video Id is required.");
-  }
+//   if (!videoId || !String(videoId).trim()) {
+//     throw new ApiError(400, "Video Id is required.");
+//   }
 
-  const video = await Video.findById(videoId);
+//   const video = await Video.findById(videoId);
 
-  return res
-    .status(200)
-    .json(
-      new ApiResponse(200, "Found and returned video successfully.", video)
-    );
-});
+//   return res
+//     .status(200)
+//     .json(
+//       new ApiResponse(200, "Found and returned video successfully.", video)
+//     );
+// });
 
-const getVideosByUserId = asyncHandler(async (req, res, next) => {
-  const {
-    page = 1,
-    limit = 10,
-    query,
-    sortBy = "createdAt",
-    sortType,
-  } = req.query;
-
-  // test for userId
-  const userId = req.user?._id;
-
-  if (!userId || !String(userId).trim()) {
-    throw new ApiError(400, "User Id is empty or User not authenticated.");
-  }
-
-  const allowedSortBy = [
-    "title",
-    "duration",
-    "views",
-    "createdAt",
-    "updatedAt",
-  ];
-
-  const allowedSortType = ["asc", "desc"];
-
-  const finalSortBy = allowedSortBy.includes(sortBy) ? sortBy : "createdAt";
-  const finalSortType = allowedSortType.includes(sortType) ? sortType : "asc";
-
-  const finalQuery = query ? query : ".*";
-
-  const aggregate = Video.aggregate([
-    {
-      $match: {
-        owner: objectId(userId),
-      },
-    },
-    {
-      $lookup: {
-        from: "users",
-        localField: "owner",
-        foreignField: "_id",
-        as: "owner",
-      },
-    },
-    {
-      $addFields: {
-        owner: {
-          $first: "$owner",
-        },
-      },
-    },
-    {
-      $match: {
-        $or: [
-          { title: { $regex: finalQuery, $options: "i" } },
-          { description: { $regex: finalQuery, $options: "i" } },
-          { owner: { $regex: finalQuery, $options: "i" } },
-        ],
-      },
-    },
-    {
-      $sort: {
-        [finalSortBy]: finalSortType === "desc" ? -1 : 1,
-      },
-    },
-  ]);
-
-  const videos = await Video.aggregatePaginate(aggregate, {
-    page: Number(page),
-    limit: Number(limit),
-  });
-
-  return res
-    .status(200)
-    .json(
-      new ApiResponse(
-        200,
-        "Found and returned user's videos successfully.",
-        videos.docs
-      )
-    );
-});
-
-const getVideoWithOwner = asyncHandler(async (req, res) => {
+const getVideoById = asyncHandler(async (req, res) => {
   // FUTURE IDEA ;
   // store userId or IP, only increment views once per user
   // Debounce user views, only count as view if user watches video for 10-30 seconds.
@@ -266,6 +182,90 @@ const getVideoWithOwner = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Video fetched successfully.", video));
 });
 
+const getMyVideos = asyncHandler(async (req, res, next) => {
+  const {
+    page = 1,
+    limit = 10,
+    query,
+    sortBy = "createdAt",
+    sortType,
+  } = req.query;
+
+  // test for userId
+  const userId = req.user?._id;
+
+  if (!userId || !String(userId).trim()) {
+    throw new ApiError(400, "User Id is empty or User not authenticated.");
+  }
+
+  const allowedSortBy = [
+    "title",
+    "duration",
+    "views",
+    "createdAt",
+    "updatedAt",
+  ];
+
+  const allowedSortType = ["asc", "desc"];
+
+  const finalSortBy = allowedSortBy.includes(sortBy) ? sortBy : "createdAt";
+  const finalSortType = allowedSortType.includes(sortType) ? sortType : "asc";
+
+  const finalQuery = query ? query : ".*";
+
+  const aggregate = Video.aggregate([
+    {
+      $match: {
+        owner: objectId(userId),
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "owner",
+        foreignField: "_id",
+        as: "owner",
+      },
+    },
+    {
+      $addFields: {
+        owner: {
+          $first: "$owner",
+        },
+      },
+    },
+    {
+      $match: {
+        $or: [
+          { title: { $regex: finalQuery, $options: "i" } },
+          { description: { $regex: finalQuery, $options: "i" } },
+          { owner: { $regex: finalQuery, $options: "i" } },
+        ],
+      },
+    },
+    {
+      $sort: {
+        [finalSortBy]: finalSortType === "desc" ? -1 : 1,
+      },
+    },
+  ]);
+
+  const videos = await Video.aggregatePaginate(aggregate, {
+    page: Number(page),
+    limit: Number(limit),
+  });
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        "Found and returned user's videos successfully.",
+        videos.docs
+      )
+    );
+});
+
 const deleteVideo = asyncHandler(async (req, res, next) => {
   const { videoId } = req.params;
 
@@ -282,7 +282,7 @@ const deleteVideo = asyncHandler(async (req, res, next) => {
   res.status(200).json(new ApiResponse(200, "Video deleted successfully.", {}));
 });
 
-const publishAVideo = asyncHandler(async (req, res, next) => {
+const publishVideo = asyncHandler(async (req, res, next) => {
   const { title, description } = req.body;
 
   console.log("title at ctrler", title);
@@ -378,6 +378,8 @@ const togglePublishStatus = asyncHandler(async (req, res, next) => {
     throw new ApiError(400, "Video Id is required.");
   }
 
+  // Remaining to implement Check for user permission (ownership) to toggle.
+
   const video = await Video.findByIdAndUpdate(
     videoId,
     [
@@ -403,11 +405,10 @@ const togglePublishStatus = asyncHandler(async (req, res, next) => {
 
 export {
   getVideoById,
-  publishAVideo,
+  publishVideo,
   togglePublishStatus,
   updateVideo,
   deleteVideo,
-  getVideosByUserId,
+  getMyVideos,
   getAllVideos,
-  getVideoWithOwner,
 };
