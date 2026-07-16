@@ -4,7 +4,7 @@ import {Input, Button} from "../components/index.js";
 import { useState } from "react";
 import {useDispatch} from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login as loginUser } from "../store/authSlice";
+import { login as loginUser } from "../features/auth/authSlice.js";
 import axios from "axios";
 
 export default function Login() {

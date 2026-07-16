@@ -1,13 +1,14 @@
-import {Logo, PlaylistDropdown} from "./index"
+import {Logo, PlaylistDropdown} from "../../components/index.js"
 import { useNavigate } from "react-router-dom";
 import {DeleteVideoFromPlaylist} from "./index.js"
 import {
     Link
 } from "react-router-dom"
 
-import {parseISO, formatDistanceToNow} from "date-fns";
+import {formatDistanceToNow} from "date-fns";
+import React, { memo } from "react";
 
-export default function VideoCard({
+function VideoCard({
     _id,
     title="title missing",
     owner={},
@@ -47,29 +48,8 @@ export default function VideoCard({
         }
     }
 
-    // const convertUploadTime = (createdAt) => {
-    //     const now = Date.now();
-    //     const diff = now - new Date(createdAt).getTime();
-
-    //     const minutes = Math.floor(diff / (1000 * 60));
-    //     const hours = Math.floor(diff / (1000 * 60 * 60));
-    //     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    //     const weeks = Math.floor(diff / (1000 * 60 * 60 * 24 * 7));
-    //     const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30));
-    //     const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
-
-    //     if (minutes < 1) return "just now";
-    //     if (minutes < 60) return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
-    //     if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-    //     if (days < 7) return `${days} day${days > 1 ? "s" : ""} ago`;
-    //     if (weeks < 4) return `${weeks} week${weeks > 1 ? "s" : ""} ago`;
-    //     if (months < 12) return `${months} month${months > 1 ? "s" : ""} ago`;
-
-    //     return `${years} year${years > 1 ? "s" : ""} ago`;
-    // };
 
     const convertUploadTime = (createdAt) => {
-        console.log(new Date(createdAt));
         let timeAgo = '';
         const uploadTime = new Date(createdAt);
 
@@ -192,3 +172,7 @@ export default function VideoCard({
         </div>
     )
 }
+
+VideoCard = memo(VideoCard);
+
+export default VideoCard;

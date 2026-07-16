@@ -1,7 +1,7 @@
 import axios from "axios";
 import { handleAxiosError } from "../api/handleAxiosError.js";
 import { useLoaderData } from "react-router-dom";
-import SubscriptionCard from "../components/SubscriptionCard";
+import SubscriptionCard from "../features/subscriptions/SubscriptionCard.jsx";
 
 export async function SubscriptionsLoader() {
   try {

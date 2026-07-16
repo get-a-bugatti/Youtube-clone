@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { useLocation, Navigate, Outlet } from "react-router-dom";
-import { isUserAuthenticated } from "../store/authSlice";
+import { isUserAuthenticated } from "../features/auth/authSlice";
 
 
 export default function Protected ({

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
 import parse from "html-react-parser"
-import { SubscribeBtnForm} from "./index"
+import { SubscribeBtnForm} from "../../components/index"
 import { HiThumbUp, HiShare } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import {ShareModal} from "./index"
+import {ShareModal} from "../../components/index"
 
 export default function VideoInfo({
     title,
@@ -20,9 +20,9 @@ export default function VideoInfo({
     const currentUrl = typeof window !== "undefined" ? window.location.href : "";
 
 
-    const likeVideo = () => {
+    // const likeVideo = () => {
         
-    }
+    // }
     
     return (
         <div className="max-w-2xl mx-auto">

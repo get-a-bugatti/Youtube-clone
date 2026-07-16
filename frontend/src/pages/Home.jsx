@@ -5,7 +5,7 @@ import { handleAxiosError } from "../api/handleAxiosError";
 import { useLoaderData } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { VideoCard } from "../components";
-import { getAllPlaylists } from "../store/playlistSlice";
+import { getAllPlaylists } from "../features/playlists/playlistSlice";
 
 export async function homeLoader({ request }) {
   try {

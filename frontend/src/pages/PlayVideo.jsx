@@ -1,7 +1,8 @@
 import axios from "axios";
 import { handleAxiosError } from "../api/handleAxiosError.js";
 import { useLoaderData } from "react-router-dom";
-import { VideoPlayer, VideoInfo } from "../components";
+import VideoPlayer from "../features/videos/VideoPlayer";
+import VideoInfo from "../features/videos/VideoInfo.jsx";
 
 export const playVideoLoader = async ({ request }) => {
   const url = new URL(request.url);

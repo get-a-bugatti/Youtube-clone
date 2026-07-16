@@ -1,4 +1,4 @@
-import {VideoForm} from "../components/index.js"
+import {VideoForm} from "../features/videos/VideoForm.jsx";
 
 export default function CreateVideo() {
     return (

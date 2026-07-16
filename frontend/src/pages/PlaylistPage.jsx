@@ -1,9 +1,9 @@
 import { useLoaderData } from "react-router-dom";
 import axios from "axios";
-import { VideoCard } from "../components";
+import { VideoCard } from "../features/videos/VideoCard";
 import { useSelector } from "react-redux";
 
-import { getAllPlaylists } from "../store/playlistSlice";
+import { getAllPlaylists } from "../features/playlists/playlistSlice";
 import { handleAxiosError } from "../api/handleAxiosError";
 
 export async function PlaylistLoader({ params }) {

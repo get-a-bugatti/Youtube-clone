@@ -1,4 +1,4 @@
-import {Button} from "./index.js"
+import {Button} from "../../components/index.js"
 
 export default function SubscribeBtn({
     isSubscribed

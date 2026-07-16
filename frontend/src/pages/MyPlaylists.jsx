@@ -1,5 +1,4 @@
-import { PlaylistCard } from "../components";
-import { useEffect, useState } from "react";
+import { PlaylistCard } from "../features/playlists/PlaylistCard";
 import axios from "axios";
 import { handleAxiosError } from "../api/handleAxiosError";
 import { useLoaderData } from "react-router-dom";

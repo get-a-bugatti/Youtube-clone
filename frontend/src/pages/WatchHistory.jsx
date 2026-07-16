@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { VideoCard } from "../components";
 import { handleAxiosError } from "../api/handleAxiosError";
 

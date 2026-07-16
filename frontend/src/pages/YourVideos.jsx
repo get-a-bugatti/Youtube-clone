@@ -1,5 +1,5 @@
 import axios from "axios";
-import {VideoCard} from "../components/index.js"
+import {VideoCard} from "../features/videos/VideoCard";
 import { handleAxiosError } from "../api/handleAxiosError.js";
 import { useLoaderData } from "react-router-dom";
 

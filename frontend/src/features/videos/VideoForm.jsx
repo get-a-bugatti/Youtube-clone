@@ -9,7 +9,7 @@ export default function VideoForm({
     video
 }) {
 
-    const {handleSubmit, register, watch, control, setValue, getValues, formState: {errors}} = useForm({
+    const {handleSubmit, register, control, getValues, formState: {errors}} = useForm({
         defaultValues: {
             title: video?.title || '',
             description: video?.description || '',

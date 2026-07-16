@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import {Input, Button, LogoutBtn, AvatarDropdown} from "../index.js"
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logout as logoutUser } from "../../store/authSlice.js";
+import { logout as logoutUser } from "../../features/auth/authSlice.js";
 import {
     Link,
 } from "react-router-dom";

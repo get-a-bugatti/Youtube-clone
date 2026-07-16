@@ -1,4 +1,5 @@
-import {VideoCard, SubscribeBtnForm} from "../components/index";
+import {VideoCard} from "../features/videos/VideoCard";
+import {SubscribeBtnForm} from "../features/subscriptions/SubscribeBtnForm";
 import { useLoaderData } from "react-router-dom";
 import axios from "axios";
 import { handleAxiosError } from "../api/handleAxiosError";
