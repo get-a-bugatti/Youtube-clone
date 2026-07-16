@@ -1,4 +1,4 @@
-import {SubscribeBtnForm} from "./index";
+import SubscribeBtnForm from "./SubscribeBtnForm.jsx";
 
 
 const formatSubscribers = (subscribers) => {

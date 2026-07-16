@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
-import {SubscribeBtn} from "./index.js"
+import SubscribeBtn from "./SubscribeBtn.jsx"
 import { useSelector } from "react-redux";
 import axios from "axios"
-import { getUserData } from "../features/auth/authSlice.js";
+import { getUserData } from "../auth/authSlice.js";
 
 export default function SubscribeBtnForm({
     channel={}

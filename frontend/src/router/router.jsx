@@ -20,7 +20,7 @@ const PlaylistPage = lazy(() => import("../pages/PlaylistPage.jsx"));
 const NotFound = lazy(() => import("../pages/NotFound.jsx"));
 
 // Components
-import { CommentCard } from "../components/index.js";
+import CommentCard from "../features/comments/CommentCard.jsx";
 import { Protected } from "../components/index.js";
 
 // Loaders

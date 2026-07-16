@@ -1,5 +1,5 @@
 import axios from "axios";
-import { VideoCard } from "../components";
+import VideoCard from "../features/videos/VideoCard";
 import { handleAxiosError } from "../api/handleAxiosError";
 
 export async function WatchHistoryLoader() {

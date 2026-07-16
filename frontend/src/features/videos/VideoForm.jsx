@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom";
 import {useState} from "react";
-import {Input, RTE, Button} from "../index.js"
+import {Input, RTE, Button} from "../../components/index.js"
 import axios from "axios";
 
 

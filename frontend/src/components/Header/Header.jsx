@@ -1,7 +1,8 @@
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FcSearch } from "react-icons/fc";
-import { useRef, useState } from "react";
-import {Input, Button, LogoutBtn, AvatarDropdown} from "../index.js"
+import { useRef } from "react";
+import {Input, Button, AvatarDropdown} from "../index.js"
+import LogoutBtn from "../../features/auth/LogoutBtn.jsx"
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout as logoutUser } from "../../features/auth/authSlice.js";

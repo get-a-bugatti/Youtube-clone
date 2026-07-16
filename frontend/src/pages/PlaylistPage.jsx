@@ -1,6 +1,6 @@
 import { useLoaderData } from "react-router-dom";
 import axios from "axios";
-import { VideoCard } from "../features/videos/VideoCard";
+import VideoCard from "../features/videos/VideoCard";
 import { useSelector } from "react-redux";
 
 import { getAllPlaylists } from "../features/playlists/playlistSlice";

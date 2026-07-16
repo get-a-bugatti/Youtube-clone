@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import parse from "html-react-parser"
-import { SubscribeBtnForm} from "../../components/index"
+import SubscribeBtnForm from "../../features/subscriptions/SubscribeBtnForm.jsx"
 import { HiThumbUp, HiShare } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import {ShareModal} from "../../components/index"

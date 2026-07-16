@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect } from "react";
-import parse from "html-react-parser"
 
 export default function VideoPlayer({
   videoUrl,

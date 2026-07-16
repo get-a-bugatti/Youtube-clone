@@ -1,5 +1,5 @@
 import { Tooltip } from "react-tooltip";
-import { Button } from "./index.js"
+import { Button } from "../../components"
 import { AiOutlineDelete } from "react-icons/ai";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";

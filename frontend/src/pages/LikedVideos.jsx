@@ -1,7 +1,7 @@
 import axios from "axios";
 import { handleAxiosError } from "../api/handleAxiosError.js";
 import { useLoaderData } from "react-router-dom";
-import { VideoCard } from "../features/videos/VideoCard";
+import VideoCard from "../features/videos/VideoCard";
 
 export async function likedVideosLoader() {
   try {

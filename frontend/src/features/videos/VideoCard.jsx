@@ -1,6 +1,7 @@
-import {Logo, PlaylistDropdown} from "../../components/index.js"
+import {Logo} from "../../components/index.js"
+import PlaylistDropdown from "../playlists/PlaylistDropdown.jsx";
+import DeleteVideoFromPlaylist from "../playlists/DeleteVideoFromPlaylist.jsx";
 import { useNavigate } from "react-router-dom";
-import {DeleteVideoFromPlaylist} from "./index.js"
 import {
     Link
 } from "react-router-dom"
