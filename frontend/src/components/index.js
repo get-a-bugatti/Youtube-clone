@@ -9,19 +9,17 @@ import AvatarDropdown from "./AvatarDropdown";
 import Logo from "./Logo";
 import Protected from "./Protected";
 import Sidebar from "./Sidebar/Sidebar";
-import LoginForm from "./Auth-Form/LoginForm";
-import SignupForm from "./Auth-Form/SignupForm";
 import RTE from "./RTE";
 import VideoPlayer from "./VideoPlayer";
 import CommentCard from "./Comment/CommentCard.jsx";
 import SubscribeBtn from "./SubscribeBtn.jsx";
 import VideoInfo from "./VideoInfo.jsx";
 import SubscribeBtnForm from "./SubscribeBtnForm.jsx";
-import Channel from "./Channel.jsx";
 import PlaylistDropdown from "./PlaylistDropdown.jsx";
 import PlaylistCard from "./PlaylistCard.jsx";
 import DeleteVideoFromPlaylist from "./DeleteVideoFromPlaylist.jsx";
-
+import ShareModal from "./ShareModal.jsx";
+import PageLoader from "./PageLoader.jsx";
 export {
   Header,
   Footer,
@@ -36,14 +34,13 @@ export {
   Logo,
   Sidebar,
   Protected,
-  LoginForm,
-  SignupForm,
   RTE,
   CommentCard,
   SubscribeBtn,
   SubscribeBtnForm,
-  Channel,
   PlaylistDropdown,
   PlaylistCard,
   DeleteVideoFromPlaylist,
+  ShareModal,
+  PageLoader,
 };

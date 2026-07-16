@@ -2,13 +2,14 @@ import { useEffect, useState } from "react"
 import {SubscribeBtn} from "./index.js"
 import { useSelector } from "react-redux";
 import axios from "axios"
+import { getUserData } from "../store/authSlice.js";
 
 export default function SubscribeBtnForm({
     channel={}
 }) {
 
 
-    const userData = useSelector(state => state.auth.userData); 
+    const userData = useSelector(getUserData); 
     const [isSubscribed, setIsSubscribed] = useState(false);
 
     if (channel.username === userData.username) return <div></div>;
@@ -18,7 +19,6 @@ export default function SubscribeBtnForm({
         if (!channel.isSubscribed && channel.username) {
             axios.get(`/api/v1/users/c/${channel.username}/isSubscribed`)
             .then(response => {
-                console.log("subscribed status :: SubscribeBtn :", response);
                 setIsSubscribed(response.data.data);
             })
             .catch(error => {

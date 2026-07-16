@@ -1,38 +1,26 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import axios from "axios";
 import { VideoCard } from "../components";
 import { useSelector } from "react-redux";
 
+import { getAllPlaylists } from "../store/playlistSlice";
+import { handleAxiosError } from "../api/handleAxiosError";
+
+export async function PlaylistLoader({ params }) {
+  try {
+    const {playlistId} = params;
+    const response = await axios.get(`/api/v1/playlists/${playlistId}`);
+    return response?.data?.data;
+    
+  } catch (error) {
+    handleAxiosError(error);
+  }
+}
+
 export default function PlaylistPage() {
-  const { playlistId } = useParams();
+  const playlist = useLoaderData();
 
-  const [playlist, setPlaylist] = useState(null);
-  const [loader, setLoader] = useState(true);
-  const [error, setError] = useState(null);
-
-  const playlists = useSelector(state => state.playlist.playlists);
-
-  useEffect(() => {
-    axios.get(`/api/v1/playlists/${playlistId}`)
-      .then(res => {
-        setPlaylist(res.data.data);
-      })
-      .catch(err => {
-        if (err.response) {
-          setError(err.response.data.message);
-        } else {
-          setError(err.message);
-        }
-      })
-      .finally(() => {
-        setLoader(false);
-      })
-      ;
-  }, [playlistId]);
-
-  if (loader) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  const playlists = useSelector(getAllPlaylists);
 
   return (
     <div className="w-full">

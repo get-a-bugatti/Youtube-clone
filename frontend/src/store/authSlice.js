@@ -20,6 +20,9 @@ export const authSlice = createSlice({
   },
 });
 
+export const isUserAuthenticated = (state) => state.auth.status;
+export const getUserData = (state) => state.auth.userData;
+
 export const { login, logout } = authSlice.actions;
 
 export default authSlice.reducer;

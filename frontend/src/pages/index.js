@@ -10,6 +10,7 @@ import WatchHistory from "./WatchHistory";
 import Channel from "./Channel";
 import MyPlaylists from "./MyPlaylists";
 import PlaylistPage from "./PlaylistPage";
+import NotFound from "./NotFound";
 
 export {
   Home,
@@ -24,4 +25,5 @@ export {
   Channel,
   MyPlaylists,
   PlaylistPage,
+  NotFound,
 };

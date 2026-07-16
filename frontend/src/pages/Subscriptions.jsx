@@ -1,46 +1,30 @@
-import { useEffect, useState } from "react"
 import axios from "axios";
-import {useSelector} from "react-redux";
+import { handleAxiosError } from "../api/handleAxiosError.js";
+import { useLoaderData } from "react-router-dom";
 import SubscriptionCard from "../components/SubscriptionCard";
+
+export async function SubscriptionsLoader() {
+  try {
+    const response = await axios.get("/api/v1/users/me/subscriptions");
+
+    return response.data.data;
+  } catch (error) {
+    handleAxiosError(error);
+  }
+}
 
 
 export default function Subscriptions() {
-    const [subscriptions, setSubscriptions] = useState([]);
-    const [loader, setLoader] = useState(true);
-    const [error, setError] = useState(null)
-    const userData = useSelector(state => state.auth.userData);
+  const subscriptions = useLoaderData();
 
-    useEffect(() => {
-
-        axios.get(`/api/v1/users/c/${userData.username}/subscription`)
-            .then(response => {
-                console.log(response.data.data);
-
-                setSubscriptions(response.data.data);
-            })
-            .catch(error => {
-                if (error.response) {
-                    setError(error.response.message.data);
-                } else {
-                    setError(error.message)
-                }
-            })
-            .finally(() => {
-                setLoader(false);
-            })
-    }, [])
-
-    if (loader) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
-    return (
-        <div className="space-y-4 ">
-            {   
-                subscriptions.map((subscription, i) => {
-                    return <SubscriptionCard key={i}
-                        channel={subscription}
-                    />
-                })
-            }
-        </div>
-    )
+  return (
+    <div className="space-y-4">
+      {subscriptions.map((subscription) => (
+        <SubscriptionCard
+          key={subscription._id}
+          channel={subscription}
+        />
+      ))}
+    </div>
+  );
 }

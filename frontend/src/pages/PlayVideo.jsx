@@ -1,50 +1,40 @@
-
-import {useState, useEffect} from "react"
-import { VideoPlayer, VideoInfo } from "../components/index.js";
-import { useSearchParams } from "react-router-dom";
 import axios from "axios";
+import { handleAxiosError } from "../api/handleAxiosError.js";
+import { useLoaderData } from "react-router-dom";
+import { VideoPlayer, VideoInfo } from "../components";
+
+export const playVideoLoader = async ({ request }) => {
+  const url = new URL(request.url);
+  const videoId = url.searchParams.get("v");
+
+  if (!videoId) {
+    throw new Response("Missing query parameter 'v'", {
+      status: 400,
+    });
+  }
+
+  try {
+    const response = await axios.get(`/api/v1/videos/owner/${videoId}`);
+
+    return response.data.data;
+  } catch (error) {
+    handleAxiosError(error);
+  }
+};
+
 
 export default function PlayVideo() {
-    const [searchParams] = useSearchParams();
-    const [video, setVideo] = useState(null);
-    const [loader, setLoader] = useState(true)
-    const [error, setError] = useState(null)
+  const video = useLoaderData();
 
-    const videoId = searchParams.get("v");
+  return (
+    <div className="w-full">
+      <VideoPlayer videoUrl={video.videoFile} />
 
-    if (!videoId) {
-        return <div>Invalid URL. Query parameter `?v` missing.</div>
-    }
-
-    useEffect(() => {
-        axios.get(`/api/v1/videos/owner/${videoId}`)
-            .then(response => {
-                setVideo(response.data?.data);
-            })
-            .catch(error => {
-                if (error.response) {
-                    setError(error.response.data.message)
-                } else {
-                    setError(error.message)
-                }
-            }).finally(() => {
-                setLoader(false);
-            })
-    }, [])
-
-
-    if (loader) return <div>Loading...</div>
-    if (error) return <div>Error: {error}</div>
-
-    return (
-        <div className="w-full">
-            <VideoPlayer
-                videoUrl={video.videoFile}
-            />
-            <VideoInfo title={video.title} 
-            description={video.description}
-            owner={video.owner}
-            />
-        </div>
-    )
+      <VideoInfo
+        title={video.title}
+        description={video.description}
+        owner={video.owner}
+      />
+    </div>
+  );
 }

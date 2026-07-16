@@ -1,68 +1,67 @@
-import { useState, useEffect } from "react";
-import { VideoCard } from "../components"
-import { useSearchParams } from "react-router-dom";
+// loaders/homeLoader.js
+
 import axios from "axios";
+import { handleAxiosError } from "../api/handleAxiosError";
+import { useLoaderData } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { VideoCard } from "../components";
+import { getAllPlaylists } from "../store/playlistSlice";
+
+export async function homeLoader({ request }) {
+  try {
+    const url = new URL(request.url);
+
+    const query = url.searchParams.get("query");
+
+    const params = new URLSearchParams();
+
+    if (query) {
+      params.set("query", query);
+    }
+
+    const queryString = params.toString();
+
+    const response = await axios.get(
+      `/api/v1/videos/all${queryString ? `?${queryString}` : ""}`
+    );
+
+    return response?.data?.data;
+  } catch (error) {
+    handleAxiosError(error);
+  }
+}
+
 
 export default function Home() {
-    const playlists = useSelector(state => state.playlist.playlists);
-
-    // TODO:  use later.
-    const [videos, setVideos] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    const [searchParams] = useSearchParams();
-    const query = searchParams.get("query");
-    
-    useEffect(() => {
-        setLoading(true);
-        setError(null);
+  const videos = useLoaderData();
+  console.log("Home rendered");
 
 
-        const params = new URLSearchParams();
-        if (query) params.set("query", query);
+  const playlists = useSelector(
+    getAllPlaylists
+  );
 
-        const queryString = params.toString();
-        const url = `/api/v1/videos/fetchAll${queryString ? `?${queryString}` : ""}`;
+  if (videos.length === 0) {
+    return <div>No videos found.</div>;
+  }
 
-        axios.get(url) // setup api later.
-            .then(response => {
-              console.log(response);
-
-                setVideos(response.data.data);
-            }).catch(error => {
-              if (error.response) {
-                setError(error.response.data.message);
-              } else {
-                  setError(error.message);
-              }
-
-            }).finally(() => {
-              setLoading(false);
-            })
-    }, [query]);
-
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>
-
-    return (
-        <div className="w-full">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {
-                    videos.map((video, i) => {
-                        return <VideoCard key={i} 
-                            _id={video._id}
-                            title={video.title}
-                            owner={video.owner}
-                            duration={video.duration}
-                            views={video.views}
-                            thumbnail={video.thumbnail}
-                            playlists={playlists}
-                        />
-                    })
-                }
-            </div>
-        </div>
-    )
+  return (
+    <div className="w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {videos.map((video) => (
+          <VideoCard
+            key={video._id}
+            _id={video._id}
+            title={video.title}
+            owner={video.owner}
+            duration={video.duration}
+            views={video.views}
+            thumbnail={video.thumbnail}
+            playlists={playlists}
+            createdAt={video.createdAt}
+          />
+        ))}
+      </div>
+    </div>
+  );
 }

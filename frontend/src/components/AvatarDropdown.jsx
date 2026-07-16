@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, useCallback } from "react"
 import { Logo } from "./index.js"
 import { useSelector } from "react-redux";
 
@@ -18,21 +18,21 @@ export default function AvatarDropdown({
     const toggleOpen = () => {
         setOpen(prev => !prev);
     }
-
-    useEffect(() => {
-
-        function handleClickOutside(event) {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setOpen(false);
-            }
+    
+    const  handleClickOutside = useCallback((event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setOpen(false);
         }
+    }, []);
+    
+    useEffect(() => {
 
         document.addEventListener("mousedown", handleClickOutside);
 
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         }
-    })
+    }, []);
 
     return (
         <div className="relative" ref={dropdownRef}>

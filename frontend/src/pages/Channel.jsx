@@ -1,43 +1,66 @@
-import {Channel as ChannelComponent} from "../components/index";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import {VideoCard, SubscribeBtnForm} from "../components/index";
+import { useLoaderData } from "react-router-dom";
 import axios from "axios";
+import { handleAxiosError } from "../api/handleAxiosError";
+
+
+export async function ChannelLoader({
+    params
+}) {
+    try {
+        const channelResponse = await axios.get("/api/v1/users/channels/" + encodeURIComponent(params.username));
+        const channelVideosResponse = await axios.get("/api/v1/videos/channels/" + encodeURIComponent(params.username));
+
+        return { channel: channelResponse?.data?.data?.[0], channelVideos: channelVideosResponse?.data?.data?.[0] };
+
+    } catch (error) {
+       handleAxiosError(error);
+    }
+}
 
 export default function Channel() {
-
-    const {username} = useParams();
-    const [channel, setChannel] = useState({});
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(true);
-     
-    useEffect(() => {
-        setLoading(true);
-        setError(null);
-        
-        axios.get(`/api/v1/users/c/${encodeURIComponent(username)}/page`)
-        .then(res => {
-            console.log("response from channel :", res);
-            setChannel(res.data?.data?.[0]);
-        })
-        .catch(error => {
-            if (error.response) {
-                setError(error.response.data.message);
-            } else {
-                setError(error.message);
-            }
-        })
-        .finally(() => setLoading(false));
-        
-    }, [username]);
-        
-
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
+    const {channel, channelVideos} = useLoaderData();
 
         return (
             <div className="w-full">
-                <ChannelComponent channel={channel}></ChannelComponent>
+
+            {/* 🔥 Channel Header */}
+            <div className="flex items-center gap-4 p-4 border-b">
+              <img
+                src={channel.avatar}
+                alt="avatar"
+                className="w-20 h-20 rounded-full object-contain bg-white"
+              />
+      
+              <div>
+                <h1 className="text-xl font-bold">{channel.fullName}</h1>
+                <p className="text-gray-500">@{channel.username}</p>
+                <p className="text-gray-500">
+                  {channel.subscribersCount} subscribers
+                </p>
+              </div>
+      
+              {/* 🔥 Subscribe button */}
+              <SubscribeBtnForm channel={channel}/>
             </div>
+      
+            {/* 🔥 Videos Section */}
+            <div className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {channelVideos.map(video => (
+                <VideoCard
+                  key={video._id}
+                  _id={video._id}
+                  title={video.title}
+                  avatar={channel.avatar}
+                  owner={video.owner}
+                  duration={video.duration}
+                  views={video.views}
+                  thumbnail={video.thumbnail}
+                  playlistDropdown={false}
+                />
+              ))}
+            </div>
+          </div>
 
         )
 }

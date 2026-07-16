@@ -1,38 +1,21 @@
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, Navigate, Outlet } from "react-router-dom";
+import { isUserAuthenticated } from "../store/authSlice";
 
 
-export default function Protected({
-    children,
+export default function Protected ({
     authentication
 }) {
-
-    const navigate = useNavigate();
-    const [loader, setLoader] = useState(true);
-    const authStatus = useSelector(state => state.auth.status); 
-
-    
-    useEffect(() => {
-         
-        if (authentication !== authStatus) {
-            if (authentication) {
-                navigate("/login")        
-            } else {
-                navigate("/");
-            }
-        }
+    const location = useLocation();
+    const authStatus = useSelector(isUserAuthenticated);
+    const from = location.state?.from?.pathname || "/";
 
 
-        // if (authentication && !authStatus) {
-        //     navigate("/login");
-        // }
+    if (authentication !== authStatus) {
+        return authentication ? 
+        (<Navigate to="/login" state={{ from: location }} replace />) :
+        (<Navigate to={from} replace />)
+    }
 
-
-        setLoader(false);
-    }, [authentication, authStatus, navigate])
-
-    return (
-        loader ? <div>Loading...</div> : <>{children}</>
-    )
+    return <Outlet />;
 }

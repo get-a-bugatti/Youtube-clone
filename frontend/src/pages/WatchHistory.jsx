@@ -1,34 +1,22 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { VideoCard } from "../components";
+import { handleAxiosError } from "../api/handleAxiosError";
+
+export async function WatchHistoryLoader() {
+    try {
+
+        const response = await axios.get("/api/v1/users/watch-history");
+        return response?.data?.data;
+    }
+     catch (error) {
+        handleAxiosError(error);
+    }
+
+}
 
 export default function WatchHistory() {
-    const [history, setHistory] = useState([]);
-    const [loader, setLoader] = useState(true);
-    const [error, setError] = useState(null);
-
-
-    useEffect(() => {
-        axios.get("/api/v1/users/history")
-            .then(response => {
-                console.log("WatchHistory response :", response.data);
-
-                setHistory(response.data.data)
-            })
-            .catch(error => {
-                if (error.response) {
-                    setError(error.response.data.message)
-                } else {
-                    setError(error.message);
-                }
-            })
-            .finally(() => {
-                setLoader(false);
-            })
-    }, [])
-
-    if (loader) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
+    const history = useLoaderData();
 
     return (
         <div className="max-w-[1000px] flex flex-col gap-3">
